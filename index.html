@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Paragliding Weather Forecast</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Paragliding Weather Forecast</h1>
+    <form method="post">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="Enter a location">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if hourly_df %}
+        <h2>Hourly Weather Forecast</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Hour</th>
+                    <th>Temperature (°C)</th>
+                    <th>Humidity (%)</th>
+                    <th>Wind Speed (m/s)</th>
+                    <th>Cloud Cover (%)</th>
+                    <th>Activity Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in hourly_df.itertuples() %}
+                    <tr>
+                        <td>{{ row.hour }}</td>
+                        <td>{{ row.temp }}</td>
+                        <td>{{ row.humidity }}</td>
+                        <td>{{ row.wind_speed }}</td>
+                        <td>{{ row.clouds }}</td>
+                        <td>{{ row.activity }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p>The most active 2-hour period is from {{ most_active_2h_start }}:00 to {{ most_active_2h_end }}:00.</p>
+
+        <div id="map"></div>
+
+        <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+    {% endif %}
+</body>
+</html>
